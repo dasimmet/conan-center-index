@@ -1,0 +1,53 @@
+url: "https://ziglang.org/download/{version}/zig-{os}-{arch}-{version}"
+archive_ext:
+  FreeBSD: ".tar.xz"
+  Linux: ".tar.xz"
+  Macos: ".tar.xz"
+  Windows: ".zip"
+sources:
+  "0.12.1":
+    x86_64:
+      Linux:
+        sha256: 8860fc9725c2d9297a63008f853e9b11e3c5a2441217f99c1e3104cc6fa4a443
+      Windows:
+        sha256: 52459b147c2de4d7c28f6b1a4b3d571c114e96836bf8e31c953a7d2f5e94251c
+      Macos:
+        sha256: 68f309c6e431d56eb42648d7fe86e8028a23464d401a467831e27c26f1a8d9c9
+      FreeBSD:
+        sha256: 30eaa28fa7bc21d01f88528d75ae4b392ae4970406675d5ac712a4937a605123
+    aarch64:
+      Linux:
+        sha256: 27d4fef393e8d8b5f3b1d19f4dd43bfdb469b4ed17bbc4c2283c1b1fe650ef7f
+      Windows:
+        sha256: e1286114a11be4695a6ad5cf0ba6a0e5f489bb3b029a5237de93598133f0c13a
+      Macos:
+        sha256: 6587860dbbc070e1ee069e1a3d18ced83b7ba7a80bf67b2c57caf7c9ce5208b1
+    armv7a:
+      Linux:
+        sha256: 27493c922fd1454137ed6cbe6b6bec00352838fcd32e6e74f4f9187011816157
+    riscv64:
+      Linux:
+        sha256: 463511a863acc16911cff6801de97623e6de296aab7b15dcda5f6fd078b400b5
+  "0.13.0":
+    x86_64:
+      Linux:
+        sha256: d45312e61ebcc48032b77bc4cf7fd6915c11fa16e4aad116b66c9468211230ea
+      Windows:
+        sha256: d859994725ef9402381e557c60bb57497215682e355204d754ee3df75ee3c158
+      Macos:
+        sha256: 8b06ed1091b2269b700b3b07f8e3be3b833000841bae5aa6a09b1a8b4773effd
+      FreeBSD:
+        sha256: adc1ffc9be56533b2f1c7191f9e435ad55db00414ff2829d951ef63d95aaad8c
+    aarch64:
+      Linux:
+        sha256: 041ac42323837eb5624068acd8b00cd5777dac4cf91179e8dad7a7e90dd0c556
+      Windows:
+        sha256: 95ff88427af7ba2b4f312f45d2377ce7a033e5e3c620c8caaa396a9aba20efda
+      Macos:
+        sha256: 46fae219656545dfaf4dce12fb4e8685cec5b51d721beee9389ab4194d43394c
+    armv7a:
+      Linux:
+        sha256: 4b0550239c2cd884cc03ddeb2b9934708f4b073ad59a96fccbfe09f7e4f54233
+    riscv64:
+      Linux:
+        sha256: 9f7f3c685894ff80f43eaf3cad1598f4844ac46f4308374237c7f912f7907bb3
