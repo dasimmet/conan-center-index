@@ -54,6 +54,8 @@ class ZigConan(ConanFile):
         zig = os.path.join(self.package_folder, f"zig")
         self.output.info("Creating ZIG env var with: " + zig)
         self.buildenv_info.define("ZIG", zig)
+        self.output.info(
+            "Creating ZIG_VERSION env var with: " + str(self.version))
         self.buildenv_info.define("ZIG_VERSION", str(self.version))
 
         for subcmd in [("CC", "cc"), ("CXX", "c++")]:
