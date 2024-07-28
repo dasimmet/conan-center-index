@@ -69,9 +69,20 @@ class ZigConan(ConanFile):
 
 class ZigBuild:
     zig_version = "0.13.0"
+    settings = "os", "arch"
+    options = {
+        'optimize': ['Debug', 'ReleaseSafe', 'ReleaseFast', 'ReleaseSmall'],
+        'target': [None, 'ANY'],
+        'step': ['install', 'ANY'],
+    }
+    default_options = {
+        'optimize': 'Debug',
+        'target': None,
+        'step': 'install',
+    }
 
     def layout(self):
-        basic_layout(self)
+        basic_layout(self, src_folder='src')
 
     def generate(self):
         ms = VirtualBuildEnv(self)
@@ -79,15 +90,45 @@ class ZigBuild:
             "ZIG_LOCAL_CACHE_DIR", f"{self.build_folder}/.zig-cache")
         ms.generate()
 
-    def requirements(self):
+    def build_requirements(self):
         self.tool_requires(f"zig/{self.zig_version}")
-        if hasattr(super(), 'requirements'):
-            super().requirements()
+        if hasattr(super(), 'build_requirements'):
+            super().build_requirements()
+
+    @property
+    def zig_target(self):
+        if self.options.target != None:
+            return str(self.options.target)
+
+        arch = str(self.settings.arch).lower()
+        if arch in arch_mapping:
+            arch = arch_mapping[arch]
+
+        return arch + '-' + str(self.settings.os).lower()
+
+    @property
+    def zig_options(self):
+        acc = []
+        for k, v in self.options.items():
+            if k in ['target', 'step']:
+                continue
+            acc.append(str("-D"+k+"="+v))
+        return acc
+
+    @property
+    def zig_build_cmd(self):
+        return ["build", "--verbose", f"-Dtarget={self.zig_target}"] + self.zig_options
+
+    def run_zig_cmd(self, prefix: str, step: str, *args, **kwargs):
+        if not 'cwd' in kwargs:
+            kwargs['cwd'] = self.source_folder
+        import shlex
+        cmd = "$ZIG " + shlex.join(self.zig_build_cmd +
+                                   ['--prefix', str(prefix), str(step)])
+        self.run(cmd, *args, **kwargs)
 
     def build(self):
-        self.run(
-            f"$ZIG build --verbose --prefix {self.build_folder}", cwd=self.source_folder)
+        self.run_zig_cmd(f"{self.build_folder}/zig-out", self.options.step)
 
     def package(self):
-        self.run(
-            f"$ZIG build --verbose --prefix {self.package_folder}", cwd=self.source_folder)
+        self.run_zig_cmd(self.package_folder, self.options.step)
