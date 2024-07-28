@@ -1,5 +1,7 @@
 from conan import ConanFile
 from conan.tools.files import get, copy
+from conan.tools.env import VirtualBuildEnv
+from conan.tools.layout import basic_layout
 import os
 
 required_conan_version = ">=2.5.0"
@@ -22,8 +24,8 @@ class ZigConan(ConanFile):
     )
     topics = ("zig", "compiler", "c", "c++")
     homepage = "https://ziglang.org"
-    url = "https://ziglang.org"
-    license = "GPL-3.0-only"
+    url = "https://github.com/ziglang/zig"
+    license = "MIT"
     settings = "os", "arch"
 
     def build(self):
@@ -63,3 +65,29 @@ class ZigConan(ConanFile):
             self.output.info(
                 "Creating {} env var with: {}".format(subcmd[0], zig_subcmd))
             self.buildenv_info.define(subcmd[0], zig_subcmd)
+
+
+class ZigBuild:
+    zig_version = "0.13.0"
+
+    def layout(self):
+        basic_layout(self)
+
+    def generate(self):
+        ms = VirtualBuildEnv(self)
+        ms.environment().define(
+            "ZIG_LOCAL_CACHE_DIR", f"{self.build_folder}/.zig-cache")
+        ms.generate()
+
+    def requirements(self):
+        self.tool_requires(f"zig/{self.zig_version}")
+        if hasattr(super(), 'requirements'):
+            super().requirements()
+
+    def build(self):
+        self.run(
+            f"$ZIG build --verbose --prefix {self.build_folder}", cwd=self.source_folder)
+
+    def package(self):
+        self.run(
+            f"$ZIG build --verbose --prefix {self.package_folder}", cwd=self.source_folder)
